@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Chat App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app">
+        <!-- 1. LOGIN SCREEN -->
+        <div id="login-screen">
+            <h1>Welcome to Lato</h1>
+            <p>Connect with friends in real-time</p>
+            <button id="login-btn">Sign in with Google</button>
+        </div>
+
+        <!-- 2. PROFILE SETUP SCREEN (Unique Username ke liye) -->
+        <div id="setup-screen" style="display: none;">
+            <h2>Complete Your Profile</h2>
+            <div class="profile-upload">
+                <!-- User ki Google photo yahan preview hogi -->
+                <img id="preview-pic" src="https://via.placeholder.com/100" alt="Preview">
+            </div>
+            <input type="text" id="unique-username" placeholder="Choose a unique username (e.g. rudeus_07)">
+            <p id="username-error" style="color: #ff4d4d; font-size: 13px; margin-top: 5px;"></p>
+            <button id="save-profile-btn">Start Chatting</button>
+        </div>
+
+        <!-- 3. MAIN CHAT SCREEN -->
+        <div id="chat-screen" style="display: none;">
+            <div id="user-info">
+                <img id="user-pic" src="" alt="Profile">
+                <span id="user-name"></span>
+                <button id="logout-btn">Logout</button>
+            </div>
+            
+            <div id="chat-box">
+                <!-- Messages yahan dikhenge -->
+                <div class="msg-notice">Welcome to the chat!</div>
+            </div>
+
+            <div id="input-area">
+                <input type="text" id="msg-input" placeholder="Type a message...">
+                <button id="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMPORTANT: type="module" lagana zaruri hai Firebase use karne ke liye -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
