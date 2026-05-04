@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// YOUR API KEYS INTEGRATED HERE
+// --- 1. Aapka Firebase Config ---
 const firebaseConfig = {
   apiKey: "AIzaSyDkz7u_g1HlXapS4VJjslldG1PIIJhPJ7A",
   authDomain: "my-first-chat-app-9ed4c.firebaseapp.com",
@@ -14,59 +14,92 @@ const firebaseConfig = {
   measurementId: "G-C7TVC0KQ70"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// Elements
-const loginBtn = document.getElementById('login-btn');
-const logoutBtn = document.getElementById('logout-btn');
-const saveBtn = document.getElementById('save-profile-btn');
-const usernameInput = document.getElementById('unique-username');
-const errorMsg = document.getElementById('username-error');
-
-function showScreen(screenId) {
-    ['login-screen', 'setup-screen', 'chat-screen'].forEach(id => {
-        document.getElementById(id).style.display = (id === screenId) ? 'flex' : 'none';
-        if(screenId !== 'chat-screen' && id === screenId) document.getElementById(id).style.display = 'block';
-    });
-}
-
-loginBtn.onclick = () => signInWithPopup(auth, provider);
-logoutBtn.onclick = () => signOut(auth);
-
+// --- 2. Page Redirection Logic (The Brain) ---
 onAuthStateChanged(auth, async (user) => {
+    const path = window.location.pathname;
+    
     if (user) {
-        document.getElementById('preview-pic').src = user.photoURL;
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-            document.getElementById('user-name').innerText = userDoc.data().username;
-            document.getElementById('user-pic').src = userDoc.data().photoURL;
-            showScreen('chat-screen');
+        // Check if user has a profile in Firestore
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+            // Profile exists -> If on Login or Profile page, send to Dashboard
+            if (path.includes('index.html') || path.includes('profile.html') || path.endsWith('/')) {
+                window.location.href = 'dashboard.html';
+            }
         } else {
-            showScreen('setup-screen');
+            // No profile -> If not already on Profile page, send there
+            if (!path.includes('profile.html')) {
+                window.location.href = 'profile.html';
+            }
         }
     } else {
-        showScreen('login-screen');
+        // Not logged in -> If not on Login page, send to Login
+        if (!path.includes('index.html') && path !== '/') {
+            window.location.href = 'index.html';
+        }
     }
 });
 
-saveBtn.onclick = async () => {
-    const username = usernameInput.value.trim().toLowerCase();
-    if (username.length < 3) return errorMsg.innerText = "Too short!";
-    
-    const q = query(collection(db, "users"), where("username", "==", username));
-    const snap = await getDocs(q);
+// --- 3. Login Function (index.html) ---
+const loginBtn = document.getElementById('login-btn');
+if (loginBtn) {
+    loginBtn.onclick = () => {
+        signInWithPopup(auth, provider).catch(err => alert("Login Error: " + err.message));
+    };
+}
 
-    if (!snap.empty) {
-        errorMsg.innerText = "Username taken!";
-    } else {
-        await setDoc(doc(db, "users", auth.currentUser.uid), {
-            username: username,
-            photoURL: auth.currentUser.photoURL,
-            uid: auth.currentUser.uid
+// --- 4. Profile Save Function (profile.html) ---
+const saveBtn = document.getElementById('save-profile-btn');
+if (saveBtn) {
+    // Show user's Google photo and email on the setup page
+    onAuthStateChanged(auth, (user) => {
+        if(user) {
+            if(document.getElementById('setup-pic')) document.getElementById('setup-pic').src = user.photoURL;
+            if(document.getElementById('user-email')) document.getElementById('user-email').innerText = user.email;
+        }
+    });
+
+    saveBtn.onclick = async () => {
+        const username = document.getElementById('unique-username').value.trim().toLowerCase();
+        const bio = document.getElementById('user-bio').value.trim();
+        const errorMsg = document.getElementById('error-msg');
+
+        if (username.length < 3) {
+            errorMsg.innerText = "Username kam se kam 3 letters ka hona chahiye!";
+            return;
+        }
+
+        try {
+            await setDoc(doc(db, "users", auth.currentUser.uid), {
+                username: username,
+                bio: bio,
+                displayName: auth.currentUser.displayName,
+                photoURL: auth.currentUser.photoURL,
+                email: auth.currentUser.email,
+                uid: auth.currentUser.uid,
+                createdAt: new Date()
+            });
+            window.location.href = 'dashboard.html';
+        } catch (e) {
+            alert("Error saving profile: " + e.message);
+        }
+    };
+}
+
+// --- 5. Logout Function (dashboard.html) ---
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+    logoutBtn.onclick = () => {
+        signOut(auth).then(() => {
+            window.location.href = 'index.html';
         });
-        showScreen('chat-screen');
-    }
-};
+    };
+}
