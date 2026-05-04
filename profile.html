@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Profile - Chatify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="card">
+            <h2>Customize Your Profile</h2>
+            <div class="profile-preview">
+                <img id="setup-pic" src="" alt="Profile">
+                <p id="user-email"></p>
+            </div>
+            
+            <div class="input-group">
+                <label>Choose Username</label>
+                <input type="text" id="unique-username" placeholder="e.g. rahul_123">
+                <small id="error-msg"></small>
+            </div>
+
+            <div class="input-group">
+                <label>Bio (Optional)</label>
+                <textarea id="user-bio" placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <button id="save-profile-btn">Finish Setup</button>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts -->
+    <script type="module" src="script.js"></script>
+</body>
+</html>
