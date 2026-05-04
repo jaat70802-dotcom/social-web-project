@@ -1,0 +1,171 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+#app {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+/* Common Card Style */
+#login-screen, #setup-screen, #chat-screen {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* Login Screen */
+#login-screen h1 {
+    color: #075e54;
+    margin-bottom: 10px;
+}
+
+#login-btn {
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+/* Setup Screen */
+.profile-upload {
+    margin: 20px 0;
+}
+
+#preview-pic {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid #075e54;
+    padding: 3px;
+    object-fit: cover;
+}
+
+#unique-username {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+}
+
+#unique-username:focus {
+    border-color: #075e54;
+}
+
+#save-profile-btn {
+    background-color: #075e54;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* Chat Screen Layout */
+#chat-screen {
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    padding: 0; /* Header alignment ke liye */
+    overflow: hidden;
+}
+
+#user-info {
+    width: 100%;
+    padding: 15px;
+    background: #075e54;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#user-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #eee;
+}
+
+#logout-btn {
+    margin-left: auto;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#chat-box {
+    flex: 1;
+    background: #e5ddd5;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.msg-notice {
+    align-self: center;
+    background: #fff3cd;
+    padding: 5px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    color: #856404;
+}
+
+/* Input Area */
+#input-area {
+    padding: 15px;
+    background: #f0f0f0;
+    display: flex;
+    gap: 10px;
+}
+
+#msg-input {
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+}
+
+#send-btn {
+    background: #075e54;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+}
